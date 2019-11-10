@@ -1,4 +1,6 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import './school_visits_screen.dart';
 import '../providers/visits.dart';
 import 'package:provider/provider.dart';
@@ -85,6 +87,28 @@ class _EditSchoolVisitsScreenState extends State<EditSchoolVisitsScreen> {
                         visitType: value,
                         date: _editedVisit.date,
                         classObservation: _editedVisit.classObservation);
+                  },
+                ),
+                DateTimeField(
+                  decoration: InputDecoration(labelText: "Date"),
+                  format: DateFormat("yyyy-MM-dd"),
+                  onSaved: (value) {
+                    _editedVisit = Visit(
+                        id: _editedVisit.id,
+                        visitType: _editedVisit.visitType,
+                        date: value,
+                        classObservation: _editedVisit.classObservation);
+                  },
+                  onShowPicker: (context, currentDate) async {
+                    currentDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2019),
+                      lastDate: DateTime.now().add(
+                        Duration(days: 30),
+                      ),
+                    );
+                    return currentDate;
                   },
                 )
               ],

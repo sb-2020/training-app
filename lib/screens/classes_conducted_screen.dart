@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/classes.dart';
 import '../screens/edit_classes_screen.dart';
+import 'package:intl/intl.dart';
 
 class ClassesConductedScreen extends StatefulWidget {
   static const routeName = '/classes_conducted';
@@ -42,7 +43,9 @@ class _ClassesConductedScreenState extends State<ClassesConductedScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                   child: ListTile(
                     title: Text(classes.classes[idx].venue),
-                    subtitle: Text(classes.classes[idx].date.toIso8601String()),
+                    //subtitle: Text(classes.classes[idx].date.toIso8601String()),
+                    subtitle: Text(DateFormat("yyyy-MM-dd")
+                        .format(classes.classes[idx].date)),
                     trailing: IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () {

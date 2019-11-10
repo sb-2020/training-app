@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/visits.dart';
 import './edit_school_visits_screen.dart';
 import './class_observations.dart';
+import 'package:intl/intl.dart';
 
 class SchoolVisitsScreen extends StatefulWidget {
   static const routeName = '/school-visits';
@@ -43,7 +44,8 @@ class _SchoolVisitsScreenState extends State<SchoolVisitsScreen> {
               ),
               child: ListTile(
                 title: Text(visits.visits[idx].visitType),
-                subtitle: Text(visits.visits[idx].date.toIso8601String()),
+                subtitle: Text(
+                    DateFormat("yyyy-MM-dd").format(visits.visits[idx].date)),
                 trailing: Container(
                   width: 100,
                   child: Row(

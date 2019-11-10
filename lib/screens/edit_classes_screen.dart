@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../providers/classes.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class EditClassesScreen extends StatefulWidget {
@@ -49,12 +50,10 @@ class _EditClassesScreenState extends State<EditClassesScreen> {
   Future<void> _saveForm() async {
     _classesForm.currentState.save();
 
-    _editedClass.date = DateTime.now();
-
     if (_editedClass.id != "") {
-      Provider.of<Classes>(context).updateClass(_editedClass);
+      Provider.of<Classes>(context, listen: false).updateClass(_editedClass);
     } else {
-      Provider.of<Classes>(context).addNewClass(_editedClass);
+      Provider.of<Classes>(context, listen: false).addNewClass(_editedClass);
     }
 
     Navigator.of(context).pop();
@@ -86,6 +85,8 @@ class _EditClassesScreenState extends State<EditClassesScreen> {
               children: <Widget>[
                 TextFormField(
                   decoration: InputDecoration(labelText: "Venue"),
+                  initialValue:
+                      _editing ? _editedClass.venue : _initValues["venue"],
                   onSaved: (value) {
                     _editedClass = Class(
                       id: _editedClass.id,
@@ -94,9 +95,28 @@ class _EditClassesScreenState extends State<EditClassesScreen> {
                     );
                   },
                 ),
-                // DateTimeField(
-                // decoration: InputDecoration(labelText: "Class date"),
-                //)
+                DateTimeField(
+                    keyboardType: TextInputType.datetime,
+                    decoration: InputDecoration(labelText: "Date"),
+                    format: DateFormat("yyyy-MM-dd"),
+                    onShowPicker: (context, date) async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime.parse("2019-01-01"),
+                        lastDate: DateTime.now().add(Duration(days: 30)),
+                        initialDate:
+                            //_editing ? _editedClass.date : _initValues["date"],
+                            DateTime.now(),
+                      );
+                      return date;
+                    },
+                    onSaved: (value) {
+                      _editedClass = Class(
+                        id: _editedClass.id,
+                        venue: _editedClass.venue,
+                        date: value,
+                      );
+                    }),
               ],
             ),
           ),
